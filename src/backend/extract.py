@@ -1,14 +1,13 @@
 import json
 import os.path
-from datamanager import DataManager
+from . datamanager import DataManager
 
-base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+def extract_info_from_json(data, output_file):
 
-def extract_info_from_json(data):
-
-    data_json = data
+    data_json = json.loads(data)
     data_text = []
     (invoice_no_idx, email_idx, due_date_idx, bill_to_idx, item_idx, subtotal_idx) = (0, 0, 0, 0, 0, 0)
+    
     
     # Get the Text Value of elements
     idx = 0
@@ -22,7 +21,7 @@ def extract_info_from_json(data):
         except KeyError:
             pass
     
-    # print(data_text)
+
     # Clean up email (In some files customer email is spanned over two elements)
     try:
         if data_text[email_idx + 1].endswith('m'):
@@ -45,18 +44,12 @@ def extract_info_from_json(data):
                 item_idx = idx
             elif 'Subtotal' in text:
                 subtotal_idx = idx
-    
-    # print((invoice_no_idx, email_idx, due_date_idx, bill_to_idx, item_idx, subtotal_idx))
+
     
     data_manager = DataManager(data_text)
 
     data_manager.set_bussiness_details(bill_to_idx=bill_to_idx)
-    data_manager.set_customer_details_and_invoice_description(bill_to_idx=bill_to_idx, item_idx=item_idx)
     data_manager.set_invoice_bill_details(item_idx=item_idx, subtotal_idx=subtotal_idx)
     data_manager.set_invoice_details(invoice_no_idx=invoice_no_idx, due_date_idx=due_date_idx, subtotal_idx=subtotal_idx)
-
-    # print(data_manager)   #invoice till bussiness name + 
-
-
-if __name__ == '__main__':
-    extract_info_from_json()
+    data_manager.set_customer_details_and_invoice_description(bill_to_idx=bill_to_idx, item_idx=item_idx)
+    data_manager.save_to_csv_file(output_file)

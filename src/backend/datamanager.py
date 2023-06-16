@@ -1,6 +1,6 @@
-from pattern import *
-import re
-
+from . pattern import *
+import re, os, csv
+from pathlib import Path
 
 class DataManager:
     def __init__(self, data):
@@ -41,32 +41,38 @@ class DataManager:
 
     def set_customer_details_and_invoice_description(self, **kwargs):
         details = self.__data[kwargs.get('bill_to_idx'): kwargs.get('item_idx')]
-        # print(details)
-        details.remove("BILL TO")
-        details.remove("DETAILS")
-        details.remove("PAYMENT")
+        if "BILL TO" in details:
+            details.remove("BILL TO")
+        if "DETAILS" in details:
+            details.remove("DETAILS")
+        if "PAYMENT" in details:
+            details.remove("PAYMENT")
 
         name = get_customer_details(details, detail='name')
-        self.__customer_name = name[1]
-        details.pop(name[0])
+        if name:
+            self.__customer_name = name[1]
+            details.pop(name[0])
 
         email = get_customer_details(details, detail='email')
-        # print(email)
-        self.__customer_email = email[1]
-        details.pop(email[0])
+        if email:
+            self.__customer_email = email[1]
+            details.pop(email[0])
 
         phone_number = get_customer_details(details, detail='number')
-        self.__customer_phone_number = phone_number[1]
-        details.pop(phone_number[0])
+        if phone_number:
+            self.__customer_phone_number = phone_number[1]
+            details.pop(phone_number[0])
 
         address_line1 = get_customer_details(details, detail='line1')
-        self.__customer_address_line1 = address_line1[1]
-        details.pop(address_line1[0])
+        if address_line1:
+            self.__customer_address_line1 = address_line1[1]
+            details.pop(address_line1[0])
 
 
         address_line2 = get_customer_details(details, detail='line2')
-        self.__customer_address_line2 = address_line2[1]
-        details.pop(address_line2[0])
+        if address_line2:
+            self.__customer_address_line2 = address_line2[1]
+            details.pop(address_line2[0])
 
         self.__invoice_description = get_invoice_description(details)
 
@@ -91,8 +97,56 @@ class DataManager:
         tax_pattern = re.compile(r'^\d{2}$')
         for s in tax_info:
             if tax_pattern.match(s):
-                self.__invoice_tax = tax_pattern.match(s).group()
+                match_obj = tax_pattern.match(s)
+                if match_obj:                
+                    self.__invoice_tax = match_obj.group()
 
+    def __to_dict(self):
+        arr_dict = []
+        for s in self.__invoice_bill_details:
+            _dict = { \
+                "Bussiness_City": self.__bussiness_city, \
+                "Bussiness_Country": self.__bussiness_country, \
+                "Bussiness_Description": self.__bussiness_description, \
+                "Bussiness_Name": self.__bussiness_name, \
+                "Bussiness_Street Address": self.__bussiness_street_address, \
+                "Bussiness_Zipcode": self.__bussiness_zipcode, \
+                "Customer_Address_line1": self.__customer_address_line1, \
+                "Customer_Address_line2": self.__customer_address_line2, \
+                "Customer_Email": self.__customer_email, \
+                "Customer_Name": self.__customer_name, \
+                "Customer_Phone Number": self.__customer_phone_number, \
+                "Invoice_Bill Details_Name": s[0], \
+                "Invoice_Bill Details_Quantitynbsp;":s[1], \
+                "Invoice_Bill Details_Rate": s[2], \
+                "Invoice_Description": self.__invoice_description, \
+                "Invoice_Due Date": self.__invoice_duedate, \
+                "Invoice_Issue Date": self.__invoice_issuedate, \
+                "Invoice_Number": self.__invoice_number, \
+                "Invoice_Tax": self.__invoice_tax \
+                }
+            arr_dict.append(_dict)
+        return arr_dict
+
+    def save_to_csv_file(self, dest_file_path):
+        arr_dict = self.__to_dict()
+
+        if not os.path.exists('ExtractedData'):
+            os.makedirs('ExtractedData')
+
+        file_path = Path(dest_file_path)
+        if  not os.path.exists(file_path):
+            file_path.touch()
+            with open(file_path, 'w', newline='') as fin:
+                writer = csv.DictWriter(fin, fieldnames=arr_dict[0].keys())
+                writer.writeheader()
+            fin.close()
+
+        with open(dest_file_path, 'a', newline='') as fin:
+            writer = csv.DictWriter(fin, fieldnames=arr_dict[0].keys())
+            writer.writerows(arr_dict)
+        fin.close()
+        
 
     def __str__(self):
         return f'"Bussiness_City": {self.__bussiness_city},\n"Bussiness_Country": {self.__bussiness_country},\n"Bussiness_Description": {self.__bussiness_description},\n"Bussiness_Name": {self.__bussiness_name},\n"Bussiness_Street Address": {self.__bussiness_street_address},\n"Bussiness_Zipcode: {self.__bussiness_zipcode},\n"Customer_Address_line1": {self.__customer_address_line1},\n"Customer_Address_line2": {self.__customer_address_line2},\n"Customer_Email": {self.__customer_email},\n"Customer_name": {self.__customer_name},\n"Customer_Phone Number": {self.__customer_phone_number},\n"Invoice_Description": {self.__invoice_description},\n"Invoice_Bill Details: {self.__invoice_bill_details},\n"Invoice_Due Datenbsp;": {self.__invoice_duedate},\n"Invoice_Issue Date": {self.__invoice_issuedate},\n"Invoice_Number": {self.__invoice_number},\n"Invoice_Tax": {self.__invoice_tax}'

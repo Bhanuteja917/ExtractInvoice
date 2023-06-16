@@ -1,55 +1,57 @@
-import os.path
-import logging
+import os
+import argparse
+from pathlib import Path
+from backend.utils import get_time_stamp
+from backend.utils import check_input
 
-from adobe.pdfservices.operation.auth.credentials import Credentials
-from adobe.pdfservices.operation.exception.exceptions import ServiceApiException, ServiceUsageException, SdkException
-from adobe.pdfservices.operation.pdfops.options.extractpdf.extract_pdf_options import ExtractPDFOptions
-from adobe.pdfservices.operation.pdfops.options.extractpdf.extract_element_type import ExtractElementType
-from adobe.pdfservices.operation.execution_context import ExecutionContext
-from adobe.pdfservices.operation.io.file_ref import FileRef
-from adobe.pdfservices.operation.pdfops.extract_pdf_operation import ExtractPDFOperation
-from adobe.pdfservices.operation.pdfops.options.extractpdf.table_structure_type import TableStructureType
-from adobe.pdfservices.operation.pdfops.options.extractpdf.extract_renditions_element_type import \
-    ExtractRenditionsElementType
+from backend.apiclient import ApiClient
+from backend.extract import extract_info_from_json
 
-logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
+ts = get_time_stamp()
+base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-def extract_info_from_pdf(file_name):
-    try:
-        # get base path.
-        base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        # print(base_path)
-        # Create a Credentials instance .
-        credentials = Credentials.service_account_credentials_builder() \
-            .from_file(base_path + "/pdfservices-api-credentials.json") \
-            .build()
-        
-        # Create an ExecutionContext instance using credentials
-        execution_context = ExecutionContext.create(credentials)
-
-        # Create ExtractPDFOperation instance
-        extract_pdf_operation = ExtractPDFOperation.create_new()
-
-        # Create a FileRef instance using path/to/source_file and set operation input
-        source = FileRef.create_from_local_file(base_path + f"/InvoicesData/TestDataSet/{file_name}")
-        extract_pdf_operation.set_input(source)
-
-        # Create ExtractPDFOptions and set them into operation
-        extract_pdf_options: ExtractPDFOptions = ExtractPDFOptions.builder() \
-            .with_element_to_extract(ExtractElementType.TEXT) \
-            .build()
-        extract_pdf_operation.set_options(extract_pdf_options)
-
-        # Execute the operation.
-        result: FileRef = extract_pdf_operation.execute(execution_context)
-
-        # Save the results to the specified location.
-        file_name = file_name.split(".")[0]
-        result.save_as(base_path + f"/output/{file_name}.zip")
-    except (ServiceApiException, ServiceUsageException, SdkException):
-        logging.exception("Exception encountered while executing operation")
+if not os.path.exists(f'{base_path}\\ExtractedData'):
+    os.mkdir(f'{base_path}\\ExtractedData')
+if not os.path.exists(f'{base_path}\\output'):
+    os.mkdir(f'{base_path}\\output')
 
 
-if __name__ == '__main__':
-    for i in range(58, 100):
-        extract_info_from_pdf(f'output{i}.pdf')
+default_output = Path(f'{base_path}\\ExtractedData\\ExtractedData({ts}).csv')
+default_api_key = Path(f'{base_path}\\pdfservices-api-credentials.json')
+
+
+parser = argparse.ArgumentParser(
+    prog='extractpdf',
+    description='Extracts data from PDF files using Adobe API and save it in CSV format.',
+    allow_abbrev=False)
+
+group = parser.add_mutually_exclusive_group(required=True)
+
+group.add_argument('-i', '--input-file', action='store', nargs='+')
+group.add_argument('-d', '--input-directory', action='store')
+parser.add_argument('-o', '--output-file', action='store', default=default_output)
+parser.add_argument('-k', '--api-key', action='store', default=default_api_key)
+
+args = parser.parse_args()
+
+input = list()
+if args.input_file:
+    input = [os.path.abspath(file) for file in args.input_file]
+elif args.input_directory:
+    input = [f'{os.path.abspath(args.input_directory)}\\{file}' for file in os.listdir(os.path.abspath(args.input_directory))]
+
+input = list(filter(lambda f: '.pdf' in f, input))
+output = os.path.abspath(args.output_file)
+
+api_client = ApiClient(args.api_key)
+
+non_existent_input = check_input(input)
+
+if not non_existent_input:
+    for file in input:
+        data_json = api_client.extract_info_from_pdf(file)
+        extract_info_from_json(data_json, output)
+else:
+    print('The program cannot find the below specified files.')
+    for file in non_existent_input:
+        print(file)
