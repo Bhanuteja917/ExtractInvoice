@@ -1,13 +1,13 @@
 import os
 import argparse
 from pathlib import Path
-from backend.utils import get_time_stamp
-from backend.utils import check_input
+from extractpdf.utils import get_time_stamp
+from extractpdf.utils import check_input
 
-from backend.apiclient import ApiClient
-from backend.extract import extract_info_from_json
+from extractpdf.apiclient import ApiClient
+from extractpdf.extract import extract_info_from_json
 
-ts = get_time_stamp()
+
 base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 if not os.path.exists(f'{base_path}\\ExtractedData'):
@@ -15,7 +15,7 @@ if not os.path.exists(f'{base_path}\\ExtractedData'):
 if not os.path.exists(f'{base_path}\\output'):
     os.mkdir(f'{base_path}\\output')
 
-
+ts = str(get_time_stamp())
 default_output = Path(f'{base_path}\\ExtractedData\\ExtractedData({ts}).csv')
 default_api_key = Path(f'{base_path}\\pdfservices-api-credentials.json')
 
@@ -40,18 +40,20 @@ if args.input_file:
 elif args.input_directory:
     input = [f'{os.path.abspath(args.input_directory)}\\{file}' for file in os.listdir(os.path.abspath(args.input_directory))]
 
-input = list(filter(lambda f: '.pdf' in f, input))
+input = list(filter(lambda f: '.pdf' in f, input))[0:2]
 output = os.path.abspath(args.output_file)
 
 api_client = ApiClient(args.api_key)
 
-non_existent_input = check_input(input)
+# non_existent_input = check_input(input)
+# print(non_existent_input)
 
-if not non_existent_input:
-    for file in input:
-        data_json = api_client.extract_info_from_pdf(file)
-        extract_info_from_json(data_json, output)
-else:
-    print('The program cannot find the below specified files.')
-    for file in non_existent_input:
-        print(file)
+# if not non_existent_input:
+for file in input:
+    data_json = api_client.extract_info_from_pdf(file)
+    extract_info_from_json(data_json, output)
+print(f'Data extracted to {args.output_file}')
+# else:
+#     print('The program cannot find the below specified files.')
+#     for file in non_existent_input:
+#         print(file)

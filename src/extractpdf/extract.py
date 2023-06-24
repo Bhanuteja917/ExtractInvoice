@@ -51,5 +51,6 @@ def extract_info_from_json(data, output_file):
     data_manager.set_bussiness_details(bill_to_idx=bill_to_idx)
     data_manager.set_invoice_bill_details(item_idx=item_idx, subtotal_idx=subtotal_idx)
     data_manager.set_invoice_details(invoice_no_idx=invoice_no_idx, due_date_idx=due_date_idx, subtotal_idx=subtotal_idx)
-    data_manager.set_customer_details_and_invoice_description(bill_to_idx=bill_to_idx, item_idx=item_idx)
+    data_manager.set_customer_details_and_invoice_description(bill_to_idx=bill_to_idx, item_idx=item_idx, due_date_idx=due_date_idx)
     data_manager.save_to_csv_file(output_file)
+    # print(data_manager)

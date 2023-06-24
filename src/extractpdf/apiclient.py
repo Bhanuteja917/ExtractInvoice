@@ -50,7 +50,7 @@ class ApiClient:
             result: FileRef = self.__extract_pdf_operation.execute(self.__execution_context)
 
             # Save the results to the specified location.
-            ts = get_time_stamp()
+            ts = str(get_time_stamp())
             file_name = f'{os.path.split(file_name)[1].split(".")[0]}({ts})'
             result.save_as(self.__base_path + f"/output/{file_name}.zip")
 
