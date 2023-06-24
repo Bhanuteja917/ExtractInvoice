@@ -3,6 +3,7 @@ import argparse
 from pathlib import Path
 from extractpdf.utils import get_time_stamp
 from extractpdf.utils import check_input
+import shutil
 
 from extractpdf.apiclient import ApiClient
 from extractpdf.extract import extract_info_from_json
@@ -52,6 +53,9 @@ api_client = ApiClient(args.api_key)
 for file in input:
     data_json = api_client.extract_info_from_pdf(file)
     extract_info_from_json(data_json, output)
+
+shutil.rmtree(f'{base_path}/output')
+
 print(f'Data extracted to {args.output_file}')
 # else:
 #     print('The program cannot find the below specified files.')

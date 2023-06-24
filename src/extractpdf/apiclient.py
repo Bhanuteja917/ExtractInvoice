@@ -11,12 +11,14 @@ from adobe.pdfservices.operation.execution_context import ExecutionContext
 from adobe.pdfservices.operation.io.file_ref import FileRef
 from adobe.pdfservices.operation.pdfops.extract_pdf_operation import ExtractPDFOperation
 
+base_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) 
+ts = get_time_stamp()
 
-logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
+logging.basicConfig(filename=f'{base_path}/logs/app_log({ts}).log',level=os.environ.get("LOGLEVEL", "INFO"))
 
 class ApiClient:
     # get the base path
-    __base_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) 
+    __base_path = base_path 
     __execution_context: ExecutionContext = ExecutionContext()
     __extract_pdf_operation: ExtractPDFOperation = ExtractPDFOperation.create_new()
 
