@@ -41,7 +41,7 @@ if args.input_file:
 elif args.input_directory:
     input = [f'{os.path.abspath(args.input_directory)}/{file}' for file in os.listdir(os.path.abspath(args.input_directory))]
 
-input = list(filter(lambda f: '.pdf' in f, input))[0:2]
+input = list(filter(lambda f: '.pdf' in f, input))
 output = os.path.abspath(args.output_file)
 
 api_client = ApiClient(args.api_key)
