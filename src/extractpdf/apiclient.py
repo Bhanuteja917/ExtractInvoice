@@ -12,6 +12,9 @@ from adobe.pdfservices.operation.io.file_ref import FileRef
 from adobe.pdfservices.operation.pdfops.extract_pdf_operation import ExtractPDFOperation
 
 base_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) 
+
+if not os.path.exists(f'{base_path}\\logs'):
+    os.mkdir(f'{base_path}\\logs')
 ts = get_time_stamp()
 
 logging.basicConfig(filename=f'{base_path}/logs/app_log({ts}).log',level=os.environ.get("LOGLEVEL", "INFO"))

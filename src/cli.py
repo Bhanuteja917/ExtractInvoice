@@ -14,8 +14,7 @@ if not os.path.exists(f'{base_path}\\ExtractedData'):
     os.mkdir(f'{base_path}\\ExtractedData')
 if not os.path.exists(f'{base_path}\\output'):
     os.mkdir(f'{base_path}\\output')
-if not os.path.exists(f'{base_path}\\logs'):
-    os.mkdir(f'{base_path}\\logs')
+
 
 ts = str(get_time_stamp())
 default_output = Path(f'{base_path}\\ExtractedData\\ExtractedData({ts}).csv')
