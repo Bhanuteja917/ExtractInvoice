@@ -49,11 +49,11 @@ pip install -r requirements.txt
 1. Use the following command to run the program.
 
 ```Shell
-python3 src/cli.py --input-folder ./InvoicesData/TestDataSet
+python3 src/cli.py --input-directory ./InvoicesData/TestDataSet
 
 # or
 
-python src/cli.py --input-folder ./InvoicesData/TestDataSet
+python src/cli.py --input-directory ./InvoicesData/TestDataSet
 ```
 
 ### The data from the TestDataSet PDFs will be extracted to a file placed in the directory ExtractedData
