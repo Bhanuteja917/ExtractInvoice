@@ -34,6 +34,7 @@ virtualenv venv
 ```Shell
 # Windows
 venv\Scripts\activate
+
 # Linux
 source venv/bin/activate
 ```
@@ -49,11 +50,11 @@ pip install -r requirements.txt
 1. Use the following command to run the program.
 
 ```Shell
-python3 src/cli.py --input-directory ./InvoicesData/TestDataSet
+python3 src/cli.py -d ./InvoicesData/TestDataSet
 
 # or
 
-python src/cli.py --input-directory ./InvoicesData/TestDataSet
+python src/cli.py -d ./InvoicesData/TestDataSet
 ```
 
 ### The data from the TestDataSet PDFs will be extracted to a file placed in the directory ExtractedData
@@ -62,14 +63,14 @@ python src/cli.py --input-directory ./InvoicesData/TestDataSet
 <br></br>
 # Usage
 
-1. Run the program, specifying the input folder or file and output file path as coomand-line arguments.
+1. Run the program, specifying the input folder or file and output file path as command-line arguments.
 
 ```Shell
-python3 src/cli.py --input-folder /path/to/input/folder --output-file /path/to/output/file
+python3 src/cli.py -d /path/to/input/folder -o /path/to/output/file
 
 # or
 
-python3 src/cli.py --input-file /path/to/input/file --output-file /path/to/output/file
+python3 src/cli.py -i /path/to/input/file -o /path/to/output/file
 ```
 
 ### Note
