@@ -31,7 +31,7 @@ virtualenv venv
 
 ```Shell
 # Windows
-.venv\Scripts\activate
+venv\Scripts\activate
 # Linux
 source venv/bin/activate
 ```
