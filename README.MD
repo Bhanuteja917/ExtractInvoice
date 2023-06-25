@@ -7,44 +7,62 @@ This program is designed to extract information from PDF invoices using the Adob
 To use this program, you'll need an Adobe PDF Services account. If you don't have one already, you can sign up for a free trial on the [Adobe PDF Services website](https://developer.adobe.com/document-services/apis/pdf-extract/).
 
 Once you have your Adobe PDF Services credentials, you can clone this repository and follow the instructions below to set up the program.
-
+<br></br>
 # Installation
 
-* Clone the repository:
+* Open Command Prompt.
+
+* Clone the repository.
 
 ```Shell
 git clone https://github.com/Bhanuteja917/ExtractInvoice.git
 ```
-1. Change directory to ExtractInvoice directory
+1. Change directory to ExtractInvoice directory.
 
 ```Shell
 cd ExtractInvoice
 ```
 
-2. Create a virtual environment 
+2. Create a virtual environment. 
 
 ```Shell
 virtualenv venv
 ```
 
-3. Activate the virtual environment
+3. Activate the virtual environment.
 
 ```Shell
 # Windows
-.venv\Scripts\activate
+venv\Scripts\activate
 # Linux
 source venv/bin/activate
 ```
 
-4. Install the required dependencies
+4. Install the required dependencies.
 
 ```Shell
 pip install -r requirements.txt
 ```
+<br></br>
+# For Adobe Hackathon
 
-## Usage
+1. Use the following command to run the program.
 
-1. Run the program, specifying the input folder or file and output file path as coomand-line arguments:
+```Shell
+python3 src/cli.py --input-folder ./InvoicesData/TestDataSet
+
+# or
+
+python src/cli.py --input-folder ./InvoicesData/TestDataSet
+```
+
+### The data from the TestDataSet PDFs will be extracted to a file placed in the directory ExtractedData
+ 
+
+<br></br>
+# Usage
+
+1. Run the program, specifying the input folder or file and output file path as coomand-line arguments.
 
 ```Shell
 python3 src/cli.py --input-folder /path/to/input/folder --output-file /path/to/output/file
