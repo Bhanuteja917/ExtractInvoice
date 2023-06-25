@@ -125,34 +125,7 @@ class DataManager:
             details.remove(s)
 
         self.__invoice_description = ' '.join(details)
-        # name = get_customer_details(details, detail='name')
-        # if name:
-        #     self.__customer_name = name[1]
-        #     details.pop(name[0])
-
-        # email = get_customer_details(details, detail='email')
-        # if email:
-        #     self.__customer_email = email[1]
-        #     details.pop(email[0])
-
-        # phone_number = get_customer_details(details, detail='number')
-        # if phone_number:
-        #     self.__customer_phone_number = phone_number[1]
-        #     details.pop(phone_number[0])
-
-        # address_line1 = get_customer_details(details, detail='line1')
-        # if address_line1:
-        #     self.__customer_address_line1 = address_line1[1]
-        #     details.pop(address_line1[0])
-
-
-        # address_line2 = get_customer_details(details, detail='line2')
-        # if address_line2:
-        #     self.__customer_address_line2 = address_line2[1]
-        #     details.pop(address_line2[0])
-
-        # self.__invoice_description = get_invoice_description(details)
-
+       
 
     def set_invoice_bill_details(self, **kwargs):
         details = self.__data[kwargs.get('item_idx'): kwargs.get('subtotal_idx')]
