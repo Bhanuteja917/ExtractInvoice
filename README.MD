@@ -44,7 +44,8 @@ source venv/bin/activate
 ```Shell
 pip install -r requirements.txt
 ```
-<br></br>
+<br>
+
 # For Adobe Hackathon
 
 1. Use the following command to run the program.
@@ -58,9 +59,22 @@ python src/cli.py -d ./InvoicesData/TestDataSet
 ```
 
 ### The data from the TestDataSet PDFs will be extracted to a file placed in the directory ExtractedData
- 
+<br>
 
-<br></br>
+### Note:
+If the 1000 free transactions are completed. Please sign up for a free trial on the [Adobe PDF Services website](https://developer.adobe.com/document-services/apis/pdf-extract/).<br>
+Place the `pdfservices-api-credentials.json` and `private.key` files in root directory of the project or specify the path to the `pdfservices-api-credentials.json` as a command line argument.
+
+```Shell
+python3 src/cli.py -d ./InvoicesData/TestDataSet -k /path/to/api-key
+
+# or
+
+python src/cli.py -d ./InvoicesData/TestDataSet -k /path/to/api-key
+```
+
+<br>
+
 # Usage
 
 1. Run the program, specifying the input folder or file and output file path as command-line arguments.
