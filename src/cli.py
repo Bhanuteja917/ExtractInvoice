@@ -10,15 +10,15 @@ from extractpdf.extract import extract_info_from_json
 
 base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-if not os.path.exists(f'{base_path}\\ExtractedData'):
-    os.mkdir(f'{base_path}\\ExtractedData')
-if not os.path.exists(f'{base_path}\\output'):
-    os.mkdir(f'{base_path}\\output')
+if not os.path.exists(f'{base_path}/ExtractedData'):
+    os.mkdir(f'{base_path}/ExtractedData')
+if not os.path.exists(f'{base_path}/output'):
+    os.mkdir(f'{base_path}/output')
 
 
 ts = str(get_time_stamp())
-default_output = Path(f'{base_path}\\ExtractedData\\ExtractedData({ts}).csv')
-default_api_key = Path(f'{base_path}\\pdfservices-api-credentials.json')
+default_output = Path(f'{base_path}/ExtractedData/ExtractedData({ts}).csv')
+default_api_key = Path(f'{base_path}/pdfservices-api-credentials.json')
 
 
 parser = argparse.ArgumentParser(
@@ -39,7 +39,7 @@ input = list()
 if args.input_file:
     input = [os.path.abspath(file) for file in args.input_file]
 elif args.input_directory:
-    input = [f'{os.path.abspath(args.input_directory)}\\{file}' for file in os.listdir(os.path.abspath(args.input_directory))]
+    input = [f'{os.path.abspath(args.input_directory)}/{file}' for file in os.listdir(os.path.abspath(args.input_directory))]
 
 input = list(filter(lambda f: '.pdf' in f, input))
 output = os.path.abspath(args.output_file)
