@@ -242,3 +242,6 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,linux,visualstudiocode,python,adobe
+# Adobe PDF Services credentials (never commit)
+pdfservices-api-credentials.json
+private.key

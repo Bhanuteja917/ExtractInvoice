@@ -1,5 +1,20 @@
 # PDF Invoice Data Extractor
 
+> **Status: archived (2023).** A hackathon project, kept for reference and no longer maintained.
+> Adobe PDF Services credentials are **not** included. Create your own free credentials and
+> save them as `pdfservices-api-credentials.json` and `private.key` in the project root (both are git-ignored).
+
+## At a glance
+
+| | |
+|---|---|
+| **What** | Command-line tool that pulls structured fields (invoice numbers, dates, line items, totals) out of PDF invoices |
+| **How** | Sends each PDF to the Adobe PDF Services Extract API, then parses the returned JSON with regex patterns (`src/extractpdf/pattern.py`) |
+| **Output** | One CSV per run in `ExtractedData/` |
+| **Stack** | Python, Adobe PDF Services SDK, argparse |
+| **Sample data** | `InvoicesData/` contains test invoices and expected output |
+
+
 This program is designed to extract information from PDF invoices using the Adobe PDF Services Extract API. It provides a convenient way to automate the extraction process, allowing users to process a large number of invoices quickly and efficiently.
 
 ## Getting Started
